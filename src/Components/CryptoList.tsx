@@ -1,13 +1,12 @@
 // Components/CryptoList.tsx
-
 'use client';
+
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Link from 'next/link';
 import Navbar from './Navbar';
-
-import App from './App';
+import TokenSwap from './TokenSwap';
 
 interface Crypto {
   id: string;
@@ -21,7 +20,16 @@ interface Crypto {
   price_change_percentage_7d_in_currency: number;
 }
 
-const CryptoTracker: React.FC = () => {
+interface CryptoListProps {
+  web3Provider: any;
+  selectedAddress: string;
+}
+
+// const CryptoTracker: React.FC = () => {
+//   const [data, setData] = useState<Crypto[]>([]);
+//   const [searchQuery, setSearchQuery] = useState<string>('');
+
+const CryptoTracker: React.FC<CryptoListProps> = ({ web3Provider, selectedAddress }) => {
   const [data, setData] = useState<Crypto[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -50,9 +58,10 @@ const CryptoTracker: React.FC = () => {
   return (
     <>
       <Navbar />
-      <App />
+      <TokenSwap web3Provider={web3Provider} selectedAddress={selectedAddress} />
+        
       <div className="container">
-        <h1 className="my-4 text-success">GeekForGeeks</h1>
+    
         <input
           type="text"
           placeholder="Search crypto name"

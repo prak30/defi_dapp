@@ -1,11 +1,19 @@
+// App.tsx
+'use client';
+
 import Web3Modal from "web3modal";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Web3Provider } from "@ethersproject/providers";
+import TokenSwap from "./TokenSwap";
 
 const providerOptions = {};
 
-function App() {
+interface AppProps {
+  onWalletConnected: (status: boolean) => void;
+}
+
+const App: React.FC<AppProps> = ({ onWalletConnected }) => {
   const [web3Provider, setWeb3Provider] = useState<Web3Provider | null>(null);
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
 
@@ -25,8 +33,10 @@ function App() {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         setSelectedAddress(accounts ? accounts[0] : null);
       }
+      onWalletConnected(true);
     } catch (error) {
       console.error(error);
+      onWalletConnected(false);
     }
   }
 
@@ -65,6 +75,7 @@ function App() {
           <div>
             <p>Connected</p>
             <p>Address: {selectedAddress}</p>
+            <TokenSwap web3Provider={web3Provider} selectedAddress={selectedAddress || ''} />
           </div>
         )}
       </header>
